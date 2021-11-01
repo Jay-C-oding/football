@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { CircularProgress } from '@material-ui/core';
+import { CircularProgress } from '@mui/material';
 import { Redirect } from 'react-router-dom';
 
 import { useFormik } from 'formik';
