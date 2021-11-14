@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { firebase } from '../../firebase';
 
 import { CircularProgress } from '@mui/material';
 import { Redirect } from 'react-router-dom';
@@ -6,13 +7,13 @@ import { Redirect } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 
-const SignIn = () => {
+const SignIn = (props) => {
   const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
-      email: '',
-      password: '',
+      email: 'jayoung8966@gmail.com',
+      password: 'connoxkicker',
     },
     validationSchema: Yup.object({
       email: Yup.string()
@@ -22,9 +23,24 @@ const SignIn = () => {
     }),
     onSubmit: (values) => {
       setLoading(true);
-      console.log(values);
+      submitForm(values);
     },
   });
+
+  const submitForm = (values) => {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword(values.email, values.password)
+      .then(() => {
+        ///show success toast
+        props.history.push('/dashboard');
+      })
+      .catch((error) => {
+        setLoading(false);
+        alert(error);
+        ////show toast
+      });
+  };
 
   return (
     <div className='container'>
@@ -44,6 +60,7 @@ const SignIn = () => {
 
           <input
             name='password'
+            placeholder='password'
             type='password'
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
